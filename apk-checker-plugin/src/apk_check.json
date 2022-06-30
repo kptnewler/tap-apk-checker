@@ -1,0 +1,57 @@
+{
+  "--apk": "/Users/newler/StudioProjects/taptap-client-cn/app/build/outputs/apk/overseaInternal/debug/TapTap_oversea_3.0.6-rel.100000_300061000_20220606_21_17.apk",
+  "--output": "/Users/newler/StudioProjects/taptap-client-cn/TapTap_oversea_3.0.6-rel.100000_300061000_20220606_21_17_apk_result",
+  "--format":"mm.html,mm.json",
+  "options": [
+    {
+      "name":"-manifest"
+    },
+    {
+      "name":"-fileSize",
+      "--min":"10",
+      "--order":"desc",
+      "--suffix":"png, jpg, jpeg, gif, arsc"
+    },
+    {
+      "name":"-countMethod",
+      "--group":"package"
+    },
+    {
+      "name":"-checkResProguard"
+    },
+    {
+      "name":"-findNonAlphaPng",
+      "--min":"10"
+    },
+    {
+      "name":"-checkMultiLibrary"
+    },
+    {
+      "name":"-uncompressedFile",
+      "--suffix":"png, jpg, jpeg, gif, arsc"
+    },
+    {
+      "name":"-countR"
+    },
+    {
+      "name":"-duplicatedFile"
+    },
+    {
+      "name":"-unusedResources",
+      "--rTxt": "/Users/newler/StudioProjects/taptap-client-cn/app/build/intermediates/runtime_symbol_list/overseaInternalDebug/R.txt",
+      "--ignoreResources"
+      :["R.raw.*",
+        "R.style.*",
+        "R.attr.*",
+        "R.id.*",
+        "R.string.*",
+        "R.dimen.*",
+        "R.color.*"
+      ]
+    },
+    {
+      "name":"-unusedAssets",
+      "--ignoreAssets":["*.so" ]
+    }
+  ]
+}
