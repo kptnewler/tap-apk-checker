@@ -4,6 +4,7 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'apk-checker-plugin'
+//    id 'gradle-dependency-graph-generator-plugin'
 }
 
 android {
@@ -58,3 +59,4 @@ dependencies {
 }
 
 apply plugin: "apk-checker-plugin"
+//apply plugin: "com.vanniktech.dependency.graph.generator"

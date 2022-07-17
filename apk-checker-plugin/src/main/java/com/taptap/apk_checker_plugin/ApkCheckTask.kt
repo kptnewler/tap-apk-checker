@@ -17,7 +17,7 @@ import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.io.FileWriter
 
-class ApkCheckTask: DefaultTask() {
+abstract class ApkCheckTask: DefaultTask() {
     @Input
     val apkCheckerExt: ApkCheckerExt? = null
 

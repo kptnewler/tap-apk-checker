@@ -35,6 +35,10 @@ dependencies {
     implementation("com.taptap.glog:gradle-logger:1.0.18-SNAPSHOT")
     // gson
     implementation("com.google.code.gson:gson:2.9.0")
+    implementation("org.jetbrains.kotlin:kotlin-compiler:1.5.20")
+
+    implementation("com.android.tools.external.org-jetbrains:uast:27.2.2")
+
 }
 
 gradlePlugin {

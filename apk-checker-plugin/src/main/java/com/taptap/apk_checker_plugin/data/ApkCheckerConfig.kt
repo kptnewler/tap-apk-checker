@@ -2,7 +2,6 @@ package com.taptap.apk_checker_plugin.data
 
 import com.google.gson.annotations.SerializedName
 import com.google.gson.annotations.Expose
-import sun.jvm.hotspot.debugger.cdbg.basic.BasicLineNumberMapping
 
 data class ApkCheckerConfig(
     @SerializedName("--apk")
