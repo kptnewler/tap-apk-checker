@@ -1,3 +1,5 @@
+import com.taptap.apk_checker_plugin.data.ApkCheckerExt
+
 buildscript {
     repositories {
         google()
@@ -37,3 +39,6 @@ subprojects {
 tasks.create<Delete>("clean") {
     delete(rootProject.buildDir)
 }
+
+
+

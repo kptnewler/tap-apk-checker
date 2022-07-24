@@ -4,6 +4,7 @@ import com.android.build.gradle.AppExtension
 import com.android.build.gradle.api.ApkVariantOutput
 import com.android.build.gradle.internal.res.LinkApplicationAndroidResourcesTask
 import com.google.gson.Gson
+import com.jaredrummler.ktsh.Shell
 import com.taptap.apk_checker_plugin.data.ApkCheckerConfig
 import com.taptap.apk_checker_plugin.data.ApkCheckerExt
 import com.taptap.apk_checker_plugin.utils.CmdExecutor
@@ -11,6 +12,7 @@ import com.taptap.glog.core.GLog
 import com.taptap.glog.core.LogLevel
 import org.gradle.api.DefaultTask
 import org.gradle.api.Project
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.TaskAction
@@ -18,11 +20,11 @@ import java.io.File
 import java.io.FileWriter
 
 abstract class ApkCheckTask: DefaultTask() {
-    @Input
-    val apkCheckerExt: ApkCheckerExt? = null
+    @get:Input
+    abstract var apkCheckerExt: Property<ApkCheckerExt>
 
-    @OutputFile
-    var apkCheckerOutFile: File? = null
+    @get:OutputFile
+    abstract var apkCheckerOutFile: File
 
     private var apkName: String = ""
 
@@ -37,12 +39,14 @@ abstract class ApkCheckTask: DefaultTask() {
     @TaskAction
     fun run() {
         // 如果没有指定变体下的 apk 则不执行
-        if (apkCheckerExt?.checkVariant.isNullOrEmpty()) {
+        if (apkCheckerExt.get().checkVariant.isEmpty()) {
             GLog.printLog(LogLevel.ERROR, "checkVariant is empty")
             return
         }
 
-        getResourceLocalPath(project, apkCheckerExt?.checkVariant!!)
+        getResourceLocalPath(project, apkCheckerExt.get().checkVariant)
+
+//        apkCheck()
     }
 
     private fun apkCheck() {
@@ -54,20 +58,21 @@ abstract class ApkCheckTask: DefaultTask() {
 
         //判断是否有java8的环境
         val java8 = File("/usr/lib/jvm/java-8-openjdk-amd64/bin")
-        if (java8.exists()) {
+        if (!java8.exists()) {
             return
         }
 
-        apkCheckerConfig.output = File(project.buildDir, "${apkName}_apk_checker_result").name
+        apkCheckerConfig.output = File(project.rootProject.buildDir, "${apkName}_apk_checker_result").name
 
-        doApkCheckCmd(createConfigFile())
+        if (doApkCheckCmd(createConfigFile()).isSuccess) {
+            uploadResult()
+        }
 
-        uploadResult()
     }
 
     private fun createConfigFile(): String {
         val configJson = gson.toJson(apkCheckerConfig)
-        val configFile = File(project.buildDir, "apk_checker_config.json")
+        val configFile = File(project.rootProject.buildDir, "apk_checker_config.json")
         if (!configFile.exists()) {
             configFile.createNewFile()
         }
@@ -97,6 +102,7 @@ abstract class ApkCheckTask: DefaultTask() {
                 }
                 .forEach { baseVariantOutput->
                     if (baseVariantOutput is ApkVariantOutput) {
+                        GLog.printLog(LogLevel.INFO, baseVariantOutput.outputFile.absolutePath)
                         apkCheckerConfig.apk = baseVariantOutput.outputFile.absolutePath
                         apkName = baseVariantOutput.outputFile.name
                         val processResourceTask = baseVariantOutput.processResourcesProvider.get()
@@ -108,9 +114,9 @@ abstract class ApkCheckTask: DefaultTask() {
         }
     }
 
-    private fun doApkCheckCmd(configJsonPath: String) {
+    private fun doApkCheckCmd(configJsonPath: String): Shell.Command.Result {
         val apkCheckerJarPath = ""
         val cmd = "java -jar $apkCheckerJarPath --$configJsonPath"
-        CmdExecutor.execCmd(cmd)
+        return CmdExecutor.execCmd(cmd)
     }
 }

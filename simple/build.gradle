@@ -60,3 +60,7 @@ dependencies {
 
 apply plugin: "apk-checker-plugin"
 //apply plugin: "com.vanniktech.dependency.graph.generator"
+
+apkChecker {
+
+}

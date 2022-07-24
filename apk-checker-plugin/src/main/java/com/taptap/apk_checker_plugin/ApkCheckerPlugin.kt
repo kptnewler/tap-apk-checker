@@ -1,7 +1,6 @@
 package com.taptap.apk_checker_plugin
 
 import com.taptap.apk_checker_plugin.data.ApkCheckerExt
-import com.taptap.apk_checker_plugin.utils.ImportPsi
 import com.taptap.glog.core.GLog
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -21,10 +20,11 @@ abstract class ApkCheckerPlugin : Plugin<Project> {
         GLog.initialize(project.gradle, true)
 
         project.afterEvaluate {
-//            val apkCheckerExt = project.extensions.create("apkChecker", ApkCheckerExt::class.java)
+            val apkCheckerExt = project.extensions.create("apkChecker", ApkCheckerExt::class.java)
 
-//            this.tasks.create("apk_checker", ApkCheckTask::class.java, apkCheckerExt)
-            this.tasks.create("scan-check", ImportPsi::class.java)
+            this.tasks.create("apk_checker", ApkCheckTask::class.java).apply {
+                this.apkCheckerExt.set(apkCheckerExt)
+            }
         }
     }
 }
